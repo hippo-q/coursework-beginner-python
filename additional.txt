@@ -1,0 +1,69 @@
+Recursive Solution to Section 10:
+
+- The problem can be solved recursively because you can take every person in contact and check their contacts till 
+we find a zombie. 
+
+The idea is then to continuously traverse down the contacts_dic and take the maximum distance of all the path 
+leading to a zombie.
+
+A few base case that  must be considered:
+    This is a base case where we pass in the distance dict, and if the person's maximum distance
+    has been calculated already, then we simply return plus the distance traveled so far
+    """
+    if person in dists:
+        return dists[person] + dist
+    """
+
+    This is another base case where basically the person cannot be found as a sick person.
+    Thus we simply return the distance travelled so far. This is mainly 
+    """
+    if person not in contacts:
+        return dist 
+    """
+
+    The bulk of the recursion algorithm then comes from:
+
+    dists here is a list of distances that the current person can go down till they meet
+    a zombie.
+
+    We recursively call this function for every single one of their contacts and append each 
+    of their distances to dists.
+
+    In the end, we simply return the max of this list of distances.
+    """
+    dists = []
+    for p in contacts[person]:
+        dists.append(_find_max_dist(p, dist + 1, contacts, zombies, dists))
+
+    return max(dists)
+    """
+
+
+Finding Spreader Zombies:
+
+The function simply takes each of the sick people's contact list checks to make sure each of them are a potential zombie. 
+If the check passed, this is appended to the output list
+
+Finding Zombie Predators:
+
+Similarly to Spreader Zombies, the function simply takes each of the sick people's contact list and checks to make sure
+each of them are a sick person. If this check passes, the sick person is appended to the output list
+
+Finding Regular Zombies:
+
+This is simply finding every sick person that is not a zombie predator or spreader zombie. 
+
+
+Additional Functions Added:
+
+_everyone(): This function simply returns everyone that is ever mentioned in the dataset (contain no duplicates)
+_all_contacts(): This simply takes everyone's contact list and appends them into a single list (may contain duplicates)
+
+
+Tests:
+
+Tests can be covered using pytests
+
+in the working directory, run:
+
+pytest automated_tests.py
